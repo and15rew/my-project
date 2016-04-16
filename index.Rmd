@@ -4,9 +4,9 @@
 
 ---
 title: "Untitled"
-output: html_document
+output: html_document ##we can change this to a pdf document, word doc, slide show, etc.
 ---
-
+##these shadowy grey things are called chuncks.  It's allowing us to run R code and then render the output of that R code.  This first chunk is called setup, this particularly one is a title.  Anything inside the {} gets evaluated in the r engine
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -31,6 +31,8 @@ plot(pressure)
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-
+```{r testing testing}
+x<-2
+```
 
 #####I named the file index.rmd
