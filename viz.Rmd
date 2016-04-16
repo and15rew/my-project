@@ -1,0 +1,29 @@
+---
+title: "viz"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Scatterplot
+
+
+
+```{r load libraries, results='hide', echo=TRUE, eval=TRUE}
+
+library(dplyr)
+library(ggplot2)
+library(gapminder)
+
+
+#invesitate data
+summary(gapminder)
+
+#now let's plot it
+
+
+
+
+```

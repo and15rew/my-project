@@ -35,4 +35,6 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 x<-2
 ```
 
+
+
 #####I named the file index.rmd
