@@ -21,8 +21,98 @@ library(dplyr)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
+```{r}
+
+#install.packages("gapminder")#again, once I install the package, I then put # in front of it to make sure R doesn't try and install it every time
+
+library(gapminder)
+str(gapminder)
+
+
+
 plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+filter(gapminder, lifeExp <29)
+#compare without dplyr
+gapminder[gapminder$lifeExp <29]
+
+#back with dplyr
+filter(gapminder, country == "Rwanda")
+
+#compare w.out dplyr
+filter(gapminder, country == "Afghanistan")
+a <- filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+
+#the pipe operator (command shift M) %>% %>% %>% %>% 
+gapminder%>% head
+head(gapminder)#same as
+
+gapminder %>% head(3)
+head(gapminder, 3)
+
+##subset with select()
+
+select(gapminder, year, lifeExp) #shows first 10 years of year and life exp columns
+
+gapminder %>% select(year, lifeExp)#  says "we're working with gapminder, and just select year and life Exp"
+
+#take whatever is on the left of the %>% and passes it to whatever is on the right as the first argument
+
+gapminder %>%
+  select(year, lifeExp) %>% 
+  head(4)
+
+
+#calculate the mean gdp for cambodia
+
+gapminder %>% 
+  filter(country == "Cambodia") %>% 
+  select(country, year, pop, gdpPercap)
+#hey gapminder, do this then do this.  Hey gapminder, filter the dataset by country, then ( %>% ) select these columns
+
+#we could also select columns by exclusion as well, if its easier
+gapminder %>% 
+  filter(country == "Cambodia") %>% 
+  select(-continent, -lifeExp) 
+
+#compare to base R
+gapminder[gapminder$country == "Cambodia", c("country","year","pop","gdpPercap")]
+
+#so ya, it's kinda easier with the dplyr package
+```
+
+
+```{r}
+#Mutate Data
+#to make a new column (gdp) by manipulating existing columns (populaiton and per capita gdp)
+
+gapminder %>% 
+  mutate(gdp <- pop*gdpPercap )
+
+#exercise, combine mutate to our previous cambodia section
+
+gapminder %>% 
+  filter(country == "Cambodia") %>% 
+  select(country, year, pop, gdpPercap) %>% 
+  mutate(gdp = pop*gdpPercap)
+
+
+gap = gapminder %>% 
+  #filter(country == "Cambodia") %>% 
+  select(country, year, pop, gdpPercap) %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  group_by(country) %>% 
+  summarise(mean_gdp <- mean(gdp)) %>% 
+  ungroup()
+
+
+
+```
+
+
+
+

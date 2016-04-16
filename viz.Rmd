@@ -27,3 +27,96 @@ summary(gapminder)
 
 
 ```
+
+
+```{r}
+
+
+
+# setup dataframe
+g = gapminder %>%
+  filter(year==2007) %>%   # most recent year 
+  mutate(pop_m = pop/1e6)  # population, millions
+
+# plot scatterplot of most recent year 
+# ggplot(dataframe (it's called g now), aes means what're you gonna assign to the x and y axes?))
+s = ggplot(g, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point()
+s
+
+s+geom_smooth()
+
+#how cool is that!  Make a variable (s) then shape it in different ways by 'adding' a function to it
+
+#now add an aesthetic, like size of points corresponding to population size
+s = ggplot(g, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point()
+s
+
+s+aes(size=pop_m)
+
+#add another aesthetic (aes)
+
+s = ggplot(g, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point()
+s
+
+
+s+aes(size=pop_m)+
+  aes(color=continent)+
+  ggtitle('Health & Wealth of Nations for 2007') +
+  xlab('GDP per capita ($/year)') +
+  ylab('Life expectancy (years)')
+
+
+
+
+```
+
+##now, if we wanted to, we could go to the top and switch output to a different type.  For example, a slide show presentation file type.  Which would make it a slideshow.  Pretty cool.  Go to rmarkdown.rstudio/com or something like that to experiment with different types.  Also, you can just change the type with the dropdown arrow on knit (to knit word doc, for example).  However, that mentioned website has great tutorials and ideas.  Check it out
+
+##Also, check out htmlwidgets.org  It's the site from the informatics course apparently and is pretty cool looking.
+
+
+
+##Plotly is a good package for making an interactive map
+
+```{r Plotly (Interactive map)}
+install.packages('plotly')
+library(plotly) # install.packages('plotly')
+
+# scatterplot (Note: key=country shows up on rollover)
+s = ggplot(g, aes(x=gdpPercap, y=lifeExp, key=country)) +
+  geom_point()
+ggplotly(s)
+```
+
+
+##Section 2.1 Making Maps
+
+```{r Making Maps}
+install.packages('tmap')
+library(tmap) # install.packages('tmap')
+
+# load world spatial polygons
+data(World)
+
+# inspect values in World
+World@data %>% tbl_df()
+
+# gapminder countries not in World. skipping for now
+g %>% 
+  anti_join(World@data, by=c('country'='name')) %>% 
+  arrange(desc(pop))
+
+# World countries not in gapminder. skipping for now
+World@data %>% 
+  anti_join(g, by=c('name'='country')) %>% 
+  arrange(desc(pop_est)) %>%
+  select(iso_a3, name, pop_est)
+
+# join gapminder data to World
+World@data = World@data %>%
+  left_join(g, by=c('name'='country'))
+```
+
